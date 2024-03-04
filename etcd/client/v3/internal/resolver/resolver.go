@@ -40,8 +40,8 @@ func New(endpoints ...string) *EtcdManualResolver {
 
 // Build returns itself for Resolver, because it's both a builder and a resolver.
 func (r *EtcdManualResolver) Build(target resolver.Target, cc resolver.ClientConn, opts resolver.BuildOptions) (resolver.Resolver, error) {
-	//r.serviceConfig = cc.ParseServiceConfig(`{"loadBalancingPolicy": "round_robin"}`)
-	r.serviceConfig = cc.ParseServiceConfig(`{"loadBalancingPolicy": "pick_first"}`)
+	r.serviceConfig = cc.ParseServiceConfig(`{"loadBalancingPolicy": "round_robin"}`)
+	// r.serviceConfig = cc.ParseServiceConfig(`{"loadBalancingPolicy": "pick_first"}`)
 	if r.serviceConfig.Err != nil {
 		return nil, r.serviceConfig.Err
 	}
