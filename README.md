@@ -11,7 +11,13 @@ kube-apiserver 가 wrapping 해서 사용중인 etcd v3 client 의 기본적인 
 ## 환경 셋업
 ARM MacOS 기준
 
-UTM 을 통해 ARM Ubuntu 서버를 설치합니다. (현재 제 환경에서는 192.168.203.8 주소를 할당받고 생성되었습니다.)
+UTM 을 통해 ARM Ubuntu 서버(가상머신)를 설치합니다. (현재 제 환경에서는 192.168.203.8 주소를 할당받고 생성되었습니다.)
+
+해당 가상머신 인스턴스에 접근(ssh/가상머신 콘솔 what ever)합니다.
+
+e.g `$ ssh <username>@192.168.203.8`
+
+*아래의 명령어들은 모두 가상머신에서 수행되면 됩니다* 
 
 ```sh
 ETCD_VER=v3.5.11
@@ -49,9 +55,9 @@ etcd 클러스터를 세팅합니다. `TLS` 인증서는 테스트용이므로 �
     --initial-cluster=node3=http://0.0.0.0:32380,node2=http://0.0.0.0:22380,node1=http://0.0.0.0:12380 --initial-cluster-state new  --initial-cluster-token token-01 
 ```
 
-각각의 터미널 세션 별로 위 명령어를 수행합니다. 이렇게하면 현재 제 테스트 환경 주소인 `192.168.203.8` 주소에 3개의 etcd 노드가 실행됩니다.
+각각의 터미널 세션(우리가 설치한 가상머신에 3개의 터미널로 ssh 등으로 붙습니다.) 별로 위 명령어를 수행합니다. 이렇게하면 현재 제 테스트 환경 주소인 `192.168.203.8` 주소에 3개의 etcd 노드가 실행됩니다.
 
-이후 별도의 터미널 세션을 하나 띄워서 `tcpdump` 를 통해 `etcd` 패킷을 캡쳐합니다.
+이후 별도의 터미널 세션을 하나 띄워서 `tcpdump` 를 통해 `etcd` 패킷을 캡쳐합니다. (이 터미널 세션 또한 우리 가상머신입니다.)
 
 ```sh
 $ sudo tcpdump -nn -i any 'port 12379 or port 22379 or port 32379 and (tcp[tcpflags] & tcp-push != 0) and dst 192.168.203.8
